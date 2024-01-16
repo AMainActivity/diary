@@ -25,8 +25,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Добавление записи"
-            android:textSize="15sp" />
+            android:padding="5dp"
+            android:textColor="#000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Добавление записи" />
 
         <com.google.android.material.textfield.TextInputLayout
 
@@ -100,13 +103,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="15dp"
+                android:textSize="15sp"
                 android:layout_weight="1"
                 android:text="укажите время начала записи" />
 
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/frgmnt_add_job_time_spinner"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="48dp"
                 android:drawSelectorOnTop="true"
                 android:layout_margin="15dp"
                 android:entries="@array/hours_array"
