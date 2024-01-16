@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Ежедневник</string>
+
+    <string name="ma_menu_help">
+  &lt;center>Приложение \"Тесты\".&lt;/center>&lt;br>
+  Разработчик - Asylbaev Mikhail, &lt;a href=\'mailto:10ama@mail.ru\'>10ama@mail.ru&lt;/a>
+ &lt;br> Выбери тест и ответь на все вопросы за определенное время
+ &lt;br> Для добавления других тестов - пишите на почтовый ящик выше.
+    </string>
+    <string-array name="hours_array">
+        <item>  00  </item>
+        <item>  01  </item>
+        <item>  02  </item>
+        <item>  03  </item>
+        <item>  04  </item>
+        <item>  05  </item>
+        <item>  06  </item>
+        <item>  07  </item>
+        <item>  08  </item>
+        <item>  09  </item>
+        <item>  10  </item>
+        <item>  11  </item>
+        <item>  12  </item>
+        <item>  13  </item>
+        <item>  14  </item>
+        <item>  15  </item>
+        <item>  16  </item>
+        <item>  17  </item>
+        <item>  18  </item>
+        <item>  19  </item>
+        <item>  20  </item>
+        <item>  21  </item>
+        <item>  22  </item>
+        <item>  23  </item>
+    </string-array>
+</resources>

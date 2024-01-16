@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:minHeight="200dp"
+    app:cardBackgroundColor="@color/blue"
+    app:cardCornerRadius="7dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true"
+    app:strokeColor="@android:color/darker_gray"
+    app:strokeWidth="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="12dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/frgmnt_add_job_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Добавление записи"
+            android:textSize="15sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:minWidth="200dp"
+            android:textColorHint="#aaa">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/frgmnt_add_job_et_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:background="@color/white"
+                android:hint="наименование"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:textColorHint="#aaa">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/frgmnt_add_job_et_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="5dp"
+                    android:background="@color/white"
+                    android:enabled="false"
+                    android:hint="дата"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/frgmnt_add_job_calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:layout_margin="5dp"
+                android:backgroundTint="@color/veryLightGrey"
+                android:clickable="true"
+                android:contentDescription="string/frgmnt_test_answers"
+                app:fabSize="mini"
+                app:srcCompat="@android:drawable/ic_menu_my_calendar" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:layout_weight="1"
+                android:text="укажите время начала записи" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/frgmnt_add_job_time_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawSelectorOnTop="true"
+                android:layout_margin="15dp"
+                android:entries="@array/hours_array"
+                android:singleLine="true"
+                android:textAlignment="viewStart" />
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:minWidth="200dp"
+            android:textColorHint="#aaa">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/frgmnt_add_job_et_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:background="@color/white"
+                android:hint="Описание"
+                android:maxLines="1"
+                android:scrollHorizontally="false"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/frgmnt_add_job_but_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="2dp"
+            android:layout_weight="2"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="Добавить"
+            android:theme="@android:style/MediaButton" />
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
