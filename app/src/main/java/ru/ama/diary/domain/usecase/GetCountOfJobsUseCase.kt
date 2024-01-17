@@ -6,6 +6,5 @@ import javax.inject.Inject
 class GetCountOfJobsUseCase @Inject constructor(
     private val repository: DiaryRepository
 ) {
-
     suspend operator fun invoke() = repository.getCountOfJobs()
 }

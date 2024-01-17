@@ -6,6 +6,5 @@ import javax.inject.Inject
 class GetJobsListByDateUseCase @Inject constructor(
     private val repository: DiaryRepository
 ) {
-
     operator fun invoke(mDate: String) = repository.getJobsList(mDate)
 }

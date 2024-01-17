@@ -1,5 +1,6 @@
 package ru.ama.diary.presentation
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import ru.ama.diary.R
 import ru.ama.diary.domain.entity.DiaryDomModel
 import ru.ama.diary.domain.usecase.AddJobUseCase
 import java.text.SimpleDateFormat
@@ -15,7 +17,9 @@ import javax.inject.Inject
 import kotlin.random.Random
 
 class AddJobViewModel @Inject constructor(
-    private val addJobUseCase: AddJobUseCase
+    private val addJobUseCase: AddJobUseCase,
+    private val application: Application
+
 ) : ViewModel() {
 
 
@@ -44,7 +48,11 @@ class AddJobViewModel @Inject constructor(
         description: String
     ) {
         if (mDate.isNotEmpty() && mTime.isNotEmpty() && name.isNotEmpty() && description.isNotEmpty()) {
-            addJob("$mDate $mTime:00", name, description)
+            addJob(
+                application.getString(
+                    R.string.frgmnt_addjob_date, mDate, mTime
+                ), name, description
+            )
 
 
         } else {
@@ -62,10 +70,7 @@ class AddJobViewModel @Inject constructor(
     fun validateInputData(name: String, idData: JobAttributeNames) {
         when (idData) {
             JobAttributeNames.JOB_DATE -> {
-                if (name.isNotEmpty()) {
-                    _errorDate.value = false
-                } else
-                    _errorDate.value = true
+                _errorDate.value = name.isEmpty()
             }
 
             JobAttributeNames.JOB_NAME -> {
@@ -73,19 +78,10 @@ class AddJobViewModel @Inject constructor(
             }
 
             JobAttributeNames.JOB_DESCRIPTION -> {
-                if (name.isNotEmpty()) {
-                    _errorDescription.value = false
-                } else
-                    _errorDescription.value = true
+                _errorDescription.value = name.isEmpty()
             }
         }
     }
-
-    /* fun resetAllError() {
-         _errorDate.value = false
-         _errorName.value = false
-         _errorDescription.value = false
-     }*/
 
     fun resetError(idData: JobAttributeNames) {
         when (idData) {
@@ -101,37 +97,32 @@ class AddJobViewModel @Inject constructor(
         name: String,
         description: String
     ) {
-        Log.e("addJob", mDate + " ${convertStringToDateInMilis(mDate)}")
+        //Log.e("addJob", mDate + " ${convertStringToDateInMilis(mDate)}")
 
         val d1 = viewModelScope.async(Dispatchers.IO) {
             addJobUseCase(
                 DiaryDomModel(
-                    Random.nextInt(0, 10000),
+                    Random.nextInt(INT_ZERO, INT_THOUSANDs),
                     convertStringToDateInMilis(mDate),
                     convertStringToDateInMilis(mDate + MILIS_IN_HOUR),
                     name,
                     description
                 )
             )
-            Log.e(
-                "addJob1", DiaryDomModel(
-                    Random.nextInt(),
-                    convertStringToDateInMilis(mDate),
-                    convertStringToDateInMilis(mDate + MILIS_IN_HOUR),
-                    name,
-                    description
-                ).toString()
-            )
-
         }
         viewModelScope.launch {
             val f = d1.await()
-            _isSuccessSave.value = if (f < 0) "ошибка записи" else "успешно сохранено"
+            _isSuccessSave.value =
+                if (f < INT_ZERO) application.getString(R.string.frgmnt_addjob_error_save) else application.getString(
+                    R.string.frgmnt_addjob_success_save
+                )
         }
     }
 
     companion object {
         private const val MILIS_IN_HOUR = 3600000
+        private const val INT_ZERO = 0
+        private const val INT_THOUSANDs = 10000
     }
 
 }

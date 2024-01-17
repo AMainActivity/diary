@@ -1,6 +1,5 @@
 package ru.ama.diary.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,8 +25,8 @@ class MainFragmentViewModel @Inject constructor(
 ) : ViewModel() {
 
     val calendar = Calendar.getInstance()
-    private var currentMonth = 0
-    var mDateL = 0L
+    private var currentMonth = INT_ZERO
+    var mDateL = LONG_ZERO
 
     var jobsListLD: LiveData<List<DiaryDomModel>>? = null
 
@@ -51,14 +50,14 @@ class MainFragmentViewModel @Inject constructor(
 
     private fun initCal(mDAte: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.e("initCal", mDAte)
+            //Log.e("initCal", mDAte)
             val list = getCalendarMonth(mDAte)
             _calendarDomModelLV.postValue(list)
-            _scrollPosition.postValue(0)
+            _scrollPosition.postValue(INT_ZERO)
             val formatter = SimpleDateFormat("dd.MM.yyyy")
             for ((index, element) in list.withIndex()) {
                 if (formatter.format(element.mDate)
-                        .compareTo(formatter.format(Calendar.getInstance().time)) == 0
+                        .compareTo(formatter.format(Calendar.getInstance().time)) == INT_ZERO
                 ) {
                     _scrollPosition.postValue(index)
                     break
@@ -70,27 +69,27 @@ class MainFragmentViewModel @Inject constructor(
     fun getJobList(mDate: Long) {
         mDateL = mDate
         viewModelScope.launch(Dispatchers.IO) {
-            Log.e("mDate", getDate(mDate))
+            //Log.e("mDate", getDate(mDate))
             _jobListDomModelLV.postValue(getJobsListByDateUseCase(getDate(mDate)))
         }
     }
 
     fun getDatesOfNextMonth() {
         currentMonth++
-        if (currentMonth == 12) {
+        if (currentMonth == INT_TWELVE) {
             calendar.set(Calendar.YEAR, calendar[Calendar.YEAR] + Calendar.YEAR)
-            currentMonth = 0
-            Log.e("currentMonth+", currentMonth.toString())
+            currentMonth = INT_ZERO
+            //Log.e("currentMonth+", currentMonth.toString())
         }
         getDates()
     }
 
     fun getDatesOfPreviousMonth() {
         currentMonth--
-        if (currentMonth == -1) {
+        if (currentMonth == INT_MINUS_ONE) {
             calendar.set(Calendar.YEAR, calendar[Calendar.YEAR] - Calendar.YEAR)
-            currentMonth = 11
-            Log.e("currentMonth-", currentMonth.toString())
+            currentMonth = INT_ELEVEN
+            //Log.e("currentMonth-", currentMonth.toString())
         }
         getDates()
     }
@@ -110,9 +109,9 @@ class MainFragmentViewModel @Inject constructor(
 
     fun getDates() {
         calendar.set(Calendar.MONTH, currentMonth)
-        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        calendar.set(Calendar.DAY_OF_MONTH, INT_ONE)
         initCal(getDateFromCalendar(calendar))
-        Log.e("currentMonth", currentMonth.toString())
+        //Log.e("currentMonth", currentMonth.toString())
     }
 
     fun getMonthName(date: Long): String {
@@ -140,5 +139,13 @@ class MainFragmentViewModel @Inject constructor(
     }
 
 
-    companion object {}
+    companion object {
+        const val LONG_ZERO = 0L
+        const val INT_ZERO = 0
+        const val INT_ELEVEN = 11
+        const val INT_TWELVE = 12
+        const val INT_ONE = 1
+        const val INT_MINUS_ONE = -1
+
+    }
 }

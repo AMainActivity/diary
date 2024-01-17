@@ -83,16 +83,22 @@ class DetailJobFragment : DialogFragment() {
 
 
         viewModel = ViewModelProvider(this, viewModelFactory)[DetailJobViewModel::class.java]
-        binding.jobDetailTvName.text = "${jobModel.name}"
-        binding.jobDetailTvDatetime.text = "${viewModel.getDate(jobModel.dateStart)} ${jobModel.timeStart}:${jobModel.timeEnd}"
-        binding.jobDetailTvInfo.text = "${jobModel.description}"
+        binding.jobDetailTvName.text = jobModel.name
+        binding.jobDetailTvDatetime.text =
+            getString(
+                R.string.frgmnt_detail_datetime,
+                viewModel.getDate(jobModel.dateStart),
+                jobModel.timeStart,
+                jobModel.timeEnd
+            )
+        binding.jobDetailTvInfo.text = jobModel.description
     }
 
 
     private fun parseArgs() {
         val args = requireArguments()
         if (!args.containsKey(ARG_JOB_INFO)) {
-            throw RuntimeException("Required param jobInfo is absent")
+            throw RuntimeException(PARSE_ERROR)
         }
         args.getParcelable<DiaryDomModelWithHour>(ARG_JOB_INFO)?.let {
             jobModel = it
@@ -103,6 +109,7 @@ class DetailJobFragment : DialogFragment() {
     companion object {
         private const val ARG_JOB_INFO = "jobInfo"
         const val NAME = "DetailJobFragment"
+        const val PARSE_ERROR = "Required param jobInfo is absent"
         fun newInstance(jobModel: DiaryDomModelWithHour): DetailJobFragment {
             return DetailJobFragment().apply {
                 arguments = Bundle().apply {

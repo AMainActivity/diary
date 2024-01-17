@@ -26,10 +26,10 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="5dp"
+            android:text="@string/add_job_tv_title"
             android:textColor="#000"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="Добавление записи" />
+            android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputLayout
 
@@ -46,7 +46,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_margin="5dp"
                 android:background="@color/white"
-                android:hint="наименование"
+                android:hint="@string/add_job_name_hint"
                 android:maxLines="1"
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -72,7 +72,7 @@
                     android:layout_margin="5dp"
                     android:background="@color/white"
                     android:enabled="false"
-                    android:hint="дата"
+                    android:hint="@string/add_job_date_hint"
                     android:maxLines="1"
                     android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -103,16 +103,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="15dp"
-                android:textSize="15sp"
                 android:layout_weight="1"
-                android:text="укажите время начала записи" />
+                android:text="@string/add_job_time_start_hint"
+                android:textSize="15sp" />
 
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/frgmnt_add_job_time_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:drawSelectorOnTop="true"
                 android:layout_margin="15dp"
+                android:drawSelectorOnTop="true"
                 android:entries="@array/hours_array"
                 android:singleLine="true"
                 android:textAlignment="viewStart" />
@@ -134,7 +134,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_margin="5dp"
                 android:background="@color/white"
-                android:hint="Описание"
+                android:hint="@string/add_job_info_hint"
                 android:maxLines="1"
                 android:scrollHorizontally="false"
                 android:singleLine="true" />
@@ -148,7 +148,7 @@
             android:layout_margin="2dp"
             android:layout_weight="2"
             android:foreground="?android:attr/selectableItemBackground"
-            android:text="Добавить"
+            android:text="@string/add_job_bt_save"
             android:theme="@android:style/MediaButton" />
     </LinearLayout>
 

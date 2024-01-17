@@ -42,12 +42,6 @@ class AddJobFragment : DialogFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-
-        }
-    }
-
     override fun onAttach(context: Context) {
         component.inject(this)
 
@@ -61,13 +55,7 @@ class AddJobFragment : DialogFragment() {
         dialog?.window?.setLayout(width, height)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     private fun showPopupDatePicker(anchor: View) {
-        Toast.makeText(requireContext(), "showPopupDatePicker", Toast.LENGTH_SHORT).show()
         val popupWindow = PopupWindow(requireContext())
         popupWindow.setBackgroundDrawable(
             ResourcesCompat.getDrawable(
@@ -132,9 +120,6 @@ class AddJobFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
-
         viewModel = ViewModelProvider(this, viewModelFactory)[AddJobViewModel::class.java]
         val adapter: ArrayAdapter<*> = ArrayAdapter.createFromResource(
             requireContext(),
@@ -193,7 +178,7 @@ class AddJobFragment : DialogFragment() {
         }
         viewModel.errorName.observe(viewLifecycleOwner) {
             val message = if (it) {
-                "введите"
+                getString(R.string.frgmnt_addjob_empty)
             } else {
                 null
             }
@@ -201,7 +186,7 @@ class AddJobFragment : DialogFragment() {
         }
         viewModel.errorDate.observe(viewLifecycleOwner) {
             val message = if (it) {
-                "введите"
+                getString(R.string.frgmnt_addjob_empty)
             } else {
                 null
             }
@@ -209,7 +194,7 @@ class AddJobFragment : DialogFragment() {
         }
         viewModel.errorDescription.observe(viewLifecycleOwner) {
             val message = if (it) {
-                "введите"// String.format(getString(R.string.set_format), TIME_PERIODIC_LENGTH)
+                getString(R.string.frgmnt_addjob_empty)
             } else {
                 null
             }

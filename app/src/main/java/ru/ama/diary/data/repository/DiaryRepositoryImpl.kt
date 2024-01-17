@@ -42,12 +42,12 @@ class DiaryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun loadJobsFromAssets(): List<Int> {
-        val listOfItems: MutableList<Int> = mutableListOf<Int>()
+        val listOfItems: MutableList<Int> = mutableListOf()
         try {
 
-            val jsonFileString = getJsonDataFromAsset("default_data.json")
+            val jsonFileString = getJsonDataFromAsset(JSON_FILENAME)
 
-            Log.i("data", jsonFileString!!)
+            //Log.i("data", jsonFileString!!)
 
             val gson = Gson()
             val listDTOType = object : TypeToken<List<DiaryDto>>() {}.type
@@ -85,4 +85,7 @@ class DiaryRepositoryImpl @Inject constructor(
         }
     }
 
+    companion object {
+        const val JSON_FILENAME = "default_data.json"
+    }
 }

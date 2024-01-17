@@ -7,6 +7,5 @@ import javax.inject.Inject
 class AddJobUseCase @Inject constructor(
     private val repository: DiaryRepository
 ) {
-
     suspend operator fun invoke(domModel: DiaryDomModel) = repository.addJob(domModel)
 }

@@ -28,7 +28,7 @@ class SplashViewModel @Inject constructor(
 
         val d2 = viewModelScope.async(Dispatchers.IO) {
             val f = d1.await()
-            if (f == 0)
+            if (f == INT_ZERO)
                 loadJobsFromAssetsUseCase()
         }
         viewModelScope.launch {
@@ -41,5 +41,7 @@ class SplashViewModel @Inject constructor(
     val canStart: LiveData<Unit>
         get() = _canStart
 
-    companion object {}
+    companion object {
+        const val INT_ZERO = 0
+    }
 }

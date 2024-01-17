@@ -40,15 +40,13 @@ class CalendarAdapter(
 
     override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
         val mJob = getItem(position)
-        // var pos=0
         with(holder.binding) {
             with(mJob) {
-                //Log.e("mDate", mDate.toString())
                 tvDateCalendarItem.text = getDayNumber(mDate)
                 tvDayCalendarItem.text = getDay3LettersName(mDate)
-                if (mCount == 0) {
+                if (mCount == INT_ZERO) {
                     lvIsJobExist.visibility = View.INVISIBLE
-                    tvCount.text = ""
+                    tvCount.text = EMPTY_STRING
                 } else {
                     lvIsJobExist.visibility = View.VISIBLE
                     tvCount.text = mCount.toString()
@@ -56,14 +54,13 @@ class CalendarAdapter(
 
                 val formatter = SimpleDateFormat("dd.MM.yyyy")
                 if (formatter.format(mDate)
-                        .compareTo(formatter.format(Calendar.getInstance().time)) == 0
+                        .compareTo(formatter.format(Calendar.getInstance().time)) == INT_ZERO
                 ) {
                     holder.binding.clCalendarItem.strokeColor =
                         ContextCompat.getColor(
                             tvDateCalendarItem.context,
                             android.R.color.holo_red_light
                         );
-                    //  pos=position
                 } else {
                     holder.binding.clCalendarItem.strokeColor =
                         ContextCompat.getColor(
@@ -71,7 +68,6 @@ class CalendarAdapter(
                             android.R.color.darker_gray
                         );
                 }
-                // holder.itemView.isSelected = pos==position
                 root.setOnClickListener {
                     onCalendarClickListener?.onCalendarClick(this)
                 }
@@ -91,7 +87,10 @@ class CalendarAdapter(
         return SimpleDateFormat("EE", Locale.getDefault()).format(calendar.time)
     }
 
-    companion object {}
+    companion object {
+        private const val EMPTY_STRING = ""
+        private const val INT_ZERO = 0
+    }
 
     interface OnCalendarClickListener {
         fun onCalendarClick(calendarModel: CalendarDomModel)

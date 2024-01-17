@@ -6,6 +6,5 @@ import javax.inject.Inject
 class GetCalendarMonth @Inject constructor(
     private val repository: DiaryRepository
 ) {
-
     operator fun invoke(mDate: String) = repository.getCalendarMonth(mDate)
 }

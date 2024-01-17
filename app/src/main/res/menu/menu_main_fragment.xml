@@ -7,12 +7,12 @@
     <item
         android:id="@+id/menu_left"
         android:icon="@drawable/ic_arrow_left_24dp"
-        android:title="Назад"
+        android:title="@string/menu_left"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/menu_right"
         android:icon="@drawable/ic_arrow_right_24dp"
-        android:title="Вперед"
+        android:title="@string/menu_right"
         app:showAsAction="always" />
 </menu>

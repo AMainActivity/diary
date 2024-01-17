@@ -1,12 +1,41 @@
 <resources>
     <string name="app_name">Ежедневник</string>
 
-    <string name="ma_menu_help">
-  &lt;center>Приложение \"Тесты\".&lt;/center>&lt;br>
+
+    <string name="cal_item_day_name">Пн</string>
+
+    <string name="add_job_tv_title">Добавление записи</string>
+    <string name="add_job_name_hint">Наименование</string>
+    <string name="add_job_date_hint">Дата</string>
+    <string name="add_job_time_start_hint">Время начала записи</string>
+    <string name="add_job_info_hint">Описание</string>
+    <string name="add_job_bt_save">Добавить</string>
+
+    <string name="frgmnt_main_select_date">Выберите дату</string>
+    <string name="item_time">12:00-13:00</string>
+    <string name="spiner_time_default">00</string>
+
+
+
+    <string name="ma_menu_about">
+  &lt;center>Приложение \"Ежедневник\".&lt;/center>&lt;br>
   Разработчик - Asylbaev Mikhail, &lt;a href=\'mailto:10ama@mail.ru\'>10ama@mail.ru&lt;/a>
- &lt;br> Выбери тест и ответь на все вопросы за определенное время
- &lt;br> Для добавления других тестов - пишите на почтовый ящик выше.
+ &lt;br> Выбери дату для отображения записей по часам.
+ &lt;br> Для добавления записей - жмите сверху \"+\".
     </string>
+    <string name="menu_left">Назад</string>
+    <string name="menu_right">Вперед</string>
+    <string name="menu_add">Добавить</string>
+    <string name="menu_about">О приложении</string>
+    <string name="frgmnt_main_no_data">Нет записи</string>
+    <string name="frgmnt_main_job_today">  Дела на %1$s %2$s %3$s</string>
+    <string name="frgmnt_main_subtitle">%1$s %2$s</string>
+    <string name="frgmnt_addjob_date">%1$s %2$s:00</string>
+    <string name="frgmnt_detail_datetime">%1$s %2$s:%3$s</string>
+    <string name="frgmnt_addjob_error_save">Ошибка записи</string>
+    <string name="frgmnt_addjob_success_save">Успешно сохранено</string>
+    <string name="frgmnt_addjob_empty">Введите</string>
+    <string name="job_adapter_time_period">%1$s-%2$s</string>
     <string-array name="hours_array">
         <item>  00  </item>
         <item>  01  </item>

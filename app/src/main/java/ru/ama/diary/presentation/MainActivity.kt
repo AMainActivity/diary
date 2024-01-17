@@ -9,6 +9,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
 import ru.ama.diary.R
 import ru.ama.diary.databinding.ActivityMainBinding
+import ru.ama.diary.databinding.ItemMenuInfoBinding
 
 
 class MainActivity : AppCompatActivity() {
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         return when (item.itemId) {
             R.id.menu_about -> {
-
+                showPopupText(findViewById(R.id.menu_add_job), getString(R.string.ma_menu_about))
                 true
             }
 
@@ -50,6 +51,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun showPopupText(anchor: View, txt: String) {
+        val popupWindow = PopupWindow(application)
+        popupWindow.animationStyle = R.style.dialog_animation
+        val binding2 = ItemMenuInfoBinding.inflate(layoutInflater)
+        popupWindow.setBackgroundDrawable(
+            ResourcesCompat.getDrawable(
+                getResources(), R.drawable.nulldr, null
+            )
+        )
+        binding2.tvMenuHelp.linksClickable = true
+        binding2.tvMenuHelp.autoLinkMask = Linkify.WEB_URLS
+        binding2.tvMenuHelp.text = HtmlCompat.fromHtml(txt, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        popupWindow.isFocusable = true
+        popupWindow.width = WindowManager.LayoutParams.WRAP_CONTENT
+        popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
+        popupWindow.contentView = binding2.root
+        popupWindow.showAsDropDown(anchor)
+
+    }
 
     private fun launchFirstScreen() {
         supportFragmentManager.beginTransaction()

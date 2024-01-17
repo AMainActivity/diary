@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import ru.ama.diary.R
 import ru.ama.diary.databinding.ItemJobInfoNoDataBinding
 import ru.ama.diary.databinding.ItemJobInfoWithDataBinding
 import ru.ama.diary.domain.entity.DiaryDomModelWithHour
@@ -45,35 +46,24 @@ class JobAdapter : ListAdapter<DiaryDomModelWithHour, RecyclerView.ViewHolder>(J
 
             else -> throw RuntimeException("Unknown view type: $viewType")
         }
-        /* val binding = ItemJobInfoWithDataBinding.inflate(
-             LayoutInflater.from(parent.context),
-             parent,
-             false
-         )*/
-        /*val binding = DataBindingUtil.inflate<ViewDataBinding>(
-            LayoutInflater.from(parent.context),
-            layout,
-            parent,
-            false
-        )*/
-        //return JobViewHolder(binding)
-    }
 
-    /* override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-         TODO("Not yet implemented")
-     }*/
+    }
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val mJob = getItem(position)
         val itemtype = holder.itemViewType
-        /*val binding =*/ when (itemtype) {
+        when (itemtype) {
             VIEW_TYPE_NO_DATA -> {
                 val binding = (holder as JobViewHolderNoData).binding
                 with(holder.binding) {
                     with(mJob) {
-                        tvTimePeriod.text = "$timeStart-$timeEnd"
-                        tvTitle.text = "$name"
+                        tvTimePeriod.text = tvTimePeriod.context.getString(
+                            R.string.job_adapter_time_period,
+                            timeStart,
+                            timeEnd
+                        )
+                        tvTitle.text = name
 
                         root.setOnClickListener {
                             onJobClickListener?.onJobClick(this)
@@ -84,16 +74,15 @@ class JobAdapter : ListAdapter<DiaryDomModelWithHour, RecyclerView.ViewHolder>(J
 
             VIEW_TYPE_WITH_DATA -> {
                 val binding = (holder as JobViewHolderWithData).binding
-                with(holder.binding) {
+                with(binding) {
                     with(mJob) {
-                        tvTimePeriod.text = "$timeStart-$timeEnd"
-                        tvTitle.text = "$name"
-                        /*tvInfo.text = description + " $dateStart - $dateFinish "
-                        if(name.isNotEmpty())
-                            frgmntJobFl.visibility= View.VISIBLE
-                        else
-                            frgmntJobFl.visibility= View.GONE
-*/
+                        tvTimePeriod.text = tvTimePeriod.context.getString(
+                            R.string.job_adapter_time_period,
+                            timeStart,
+                            timeEnd
+                        )
+                        tvTitle.text = name
+
                         root.setOnClickListener {
                             onJobClickListener?.onJobClick(this)
                         }
@@ -103,21 +92,7 @@ class JobAdapter : ListAdapter<DiaryDomModelWithHour, RecyclerView.ViewHolder>(J
 
             else -> throw RuntimeException("Unknown view type: $itemtype")
         }
-        /*with(holder.binding) {
-            with(mJob) {
-                tvTimePeriod.text = "$timeStart-$timeEnd"
-                tvTitle.text = "$name"
-                tvInfo.text = description + " $dateStart - $dateFinish "
-                if(name.isNotEmpty())
-                    frgmntJobFl.visibility= View.VISIBLE
-                else
-                    frgmntJobFl.visibility= View.GONE
 
-                root.setOnClickListener {
-                    onJobClickListener?.onJobClick(this)
-                }
-            }
-        }*/
     }
 
     private fun getDayNumber(date: Date): String =
