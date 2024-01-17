@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ru.ama.diary">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:name="ru.ama.diary.presentation.MyApplication"
         android:allowBackup="true"
