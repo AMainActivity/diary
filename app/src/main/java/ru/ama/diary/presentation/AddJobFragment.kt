@@ -16,13 +16,13 @@ import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.PopupWindow
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import ru.ama.diary.R
 import ru.ama.diary.databinding.DatePickerDaysBinding
 import ru.ama.diary.databinding.FragmentAddJobBinding
+import ru.ama.diary.domain.entity.DiaryDomModelWithHour
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import javax.inject.Inject
@@ -35,6 +35,8 @@ class AddJobFragment : DialogFragment() {
         get() = _binding ?: throw RuntimeException("FragmentAddJobBinding == null")
 
     private lateinit var viewModel: AddJobViewModel
+    private var jobModel: DiaryDomModelWithHour? = null
+    private var mDate = 0L
     private val component by lazy {
         (requireActivity().application as MyApplication).component
     }
@@ -46,6 +48,11 @@ class AddJobFragment : DialogFragment() {
         component.inject(this)
 
         super.onAttach(context)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        parseArgs()
     }
 
     override fun onStart() {
@@ -121,11 +128,13 @@ class AddJobFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this, viewModelFactory)[AddJobViewModel::class.java]
-        val adapter: ArrayAdapter<*> = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.hours_array, R.layout.spinner_item
+        val hoursArray = resources.getStringArray(
+            R.array.hours_array
         )
-
+        val adapter: ArrayAdapter<*> = ArrayAdapter(
+            requireContext(),
+            R.layout.spinner_item, hoursArray
+        )
         binding.frgmntAddJobCalendar.setOnClickListener {
             showPopupDatePicker(it)
         }
@@ -169,7 +178,15 @@ class AddJobFragment : DialogFragment() {
                 binding.frgmntAddJobEtDescription.text.toString()
             )
         }
+        jobModel?.let {
+            binding.frgmntAddJobEtDescription.setText(it.description)
+            binding.frgmntAddJobEtDate.setText(viewModel.getDate(mDate))
+            binding.frgmntAddJobTimeSpinner.setSelection(hoursArray.indexOf(viewModel.parseTime(it.timeStart)))
+            Log.e("indexOf",(hoursArray.indexOf(it.timeStart)).toString()+" "+it.timeStart)
+        }
+
     }
+
 
     private fun observeViewModel() {
         viewModel.isSuccessSave.observe(viewLifecycleOwner) {
@@ -202,11 +219,29 @@ class AddJobFragment : DialogFragment() {
         }
     }
 
+    private fun parseArgs() {
+        val args = requireArguments()
+        if (!args.containsKey(ARG_ADD_JOB) && !args.containsKey(ARG_ADD_JOB_DATE)) {
+            throw RuntimeException(PARSE_ERROR)
+        }
+        args.getParcelable<DiaryDomModelWithHour>(ARG_ADD_JOB)?.let {
+            jobModel = it
+        }
+        mDate=args.getLong(ARG_ADD_JOB_DATE)
+    }
+
     companion object {
         private const val ARG_ADD_JOB = "addJob"
+        private const val ARG_ADD_JOB_DATE = "addJobDate"
+        const val PARSE_ERROR = "Required param jobInfo is absent"
         const val NAME = "AddJobFragment"
-        fun newInstance(): AddJobFragment {
-            return AddJobFragment()
+        fun newInstance(jobModel: DiaryDomModelWithHour?, mDate: Long): AddJobFragment {
+            return AddJobFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(ARG_ADD_JOB, jobModel)
+                    putLong(ARG_ADD_JOB_DATE, mDate)
+                }
+            }
         }
     }
 }

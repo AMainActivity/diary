@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -84,6 +85,29 @@ class MainFragment : Fragment() {
         _binding = null
     }
 
+    private fun logInAlertDialog(jobModel: DiaryDomModelWithHour, mDate: Long) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.frgmnt_main_allow_add))
+            .setMessage(
+                getString(
+                    R.string.frgmnt_main_add_new_job,
+                    viewModel.getDateDdMmYyyy(mDate),
+                    jobModel.timeStart,
+                    jobModel.timeEnd
+                )
+            )
+            .setCancelable(true)
+            .setPositiveButton(getString(R.string.frgmnt_main_create)) { _, _ ->
+                AddJobFragment.newInstance(jobModel, mDate).show(
+                    childFragmentManager, AddJobFragment.NAME
+                )
+            }
+            .setNegativeButton(getString(R.string.frgmnt_main_cancel)) { dialogInterface, i ->
+                dialogInterface.dismiss()
+            }
+            .show()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -113,10 +137,7 @@ class MainFragment : Fragment() {
                         childFragmentManager, DetailJobFragment.NAME
                     )
                 else
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.frgmnt_main_no_data), Toast.LENGTH_SHORT
-                    ).show()
+                    logInAlertDialog(jobModel, viewModel.mDateL)
             }
 
         }

@@ -10,6 +10,8 @@
     <string name="add_job_time_start_hint">Время начала записи</string>
     <string name="add_job_info_hint">Описание</string>
     <string name="add_job_bt_save">Добавить</string>
+    <string name="detail_job_date_time">Дата и время</string>
+    <string name="detail_job_title">Информация о событии</string>
 
     <string name="frgmnt_main_select_date">Выберите дату</string>
     <string name="item_time">12:00-13:00</string>
@@ -31,11 +33,15 @@
     <string name="frgmnt_main_job_today">  Дела на %1$s %2$s %3$s</string>
     <string name="frgmnt_main_subtitle">%1$s %2$s</string>
     <string name="frgmnt_addjob_date">%1$s %2$s:00</string>
-    <string name="frgmnt_detail_datetime">%1$s %2$s:%3$s</string>
+    <string name="frgmnt_detail_datetime">%1$s %2$s-%3$s</string>
     <string name="frgmnt_addjob_error_save">Ошибка записи</string>
     <string name="frgmnt_addjob_success_save">Успешно сохранено</string>
     <string name="frgmnt_addjob_empty">Введите</string>
     <string name="job_adapter_time_period">%1$s-%2$s</string>
+    <string name="frgmnt_main_allow_add">Подтвердите</string>
+    <string name="frgmnt_main_add_new_job">На %1$s %2$s - %3$s нет записи, создать новую?</string>
+    <string name="frgmnt_main_create">Создать</string>
+    <string name="frgmnt_main_cancel">Отмена</string>
     <string-array name="hours_array">
         <item>  00  </item>
         <item>  01  </item>

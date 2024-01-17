@@ -37,8 +37,8 @@ class DiaryRepositoryImpl @Inject constructor(
         return jsonString
     }
 
-    override suspend fun addJob(domModel: DiaryDomModel): Long {
-        return jobListDao.insertJob(mapper.mapDataDomToDbModel(domModel))
+    override suspend fun addJob(domModel: DiaryDomModel): Int {
+        return jobListDao.insertOrUpdateJob(mapper.mapDataDomToDbModel(domModel))
     }
 
     override suspend fun loadJobsFromAssets(): List<Int> {

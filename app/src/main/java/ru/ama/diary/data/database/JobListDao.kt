@@ -5,7 +5,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import ru.ama.diary.domain.entity.DiaryDomModelWithHour
 
 @Dao
 interface JobListDao {
@@ -63,5 +62,25 @@ interface JobListDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertJobsList(jobsList: List<DiaryDBModel>): List<Long>
+
+    @Query("SELECT * FROM todo_table WHERE date_start= :dateStart limit 1")
+    suspend fun getJobByDateStart(dateStart: Long): DiaryDBModel
+
+    suspend fun insertOrUpdateJob(job: DiaryDBModel): Int {
+        val jobByDateStart = getJobByDateStart(job.dateStart)
+        return if(jobByDateStart==null) insertJob(job).toInt()
+        else updateJob(job.dateStart ,
+         job.idFromJson, job.name, job.description)
+    }
+
+    @Query("UPDATE todo_table SET idFromJson = :idFromJson, name=:name,description=:description WHERE date_start= :dateStart")
+    suspend fun updateJob(
+        dateStart: Long,
+        idFromJson: Int,
+        name: String,
+        description: String
+    ): Int
+
+
 }
 

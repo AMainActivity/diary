@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.menu_add_job -> {
-                AddJobFragment.newInstance().show(
+                AddJobFragment.newInstance(null,0).show(
                     supportFragmentManager, AddJobFragment.NAME
                 )
                 true

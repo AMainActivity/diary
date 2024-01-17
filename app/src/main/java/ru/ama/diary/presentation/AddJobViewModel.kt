@@ -13,6 +13,7 @@ import ru.ama.diary.R
 import ru.ama.diary.domain.entity.DiaryDomModel
 import ru.ama.diary.domain.usecase.AddJobUseCase
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -92,6 +93,19 @@ class AddJobViewModel @Inject constructor(
 
     }
 
+    fun parseTime(time: String): String {
+        var temp = time.split(DELIMITER)[INT_ZERO]
+        if (temp.length == 1) temp = STRING_ZERO + temp
+        return temp
+    }
+
+    fun getDate(milliSeconds: Long): String {
+        val formatter = SimpleDateFormat("dd.MM.yyyy")
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = milliSeconds
+        return formatter.format(cal.time)
+    }
+
     private fun addJob(
         mDate: String,
         name: String,
@@ -122,6 +136,8 @@ class AddJobViewModel @Inject constructor(
     companion object {
         private const val MILIS_IN_HOUR = 3600000
         private const val INT_ZERO = 0
+        private const val DELIMITER = ":"
+        private const val STRING_ZERO = "0"
         private const val INT_THOUSANDs = 10000
     }
 

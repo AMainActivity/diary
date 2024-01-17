@@ -10,6 +10,6 @@ interface DiaryRepository {
     suspend fun getCountOfJobs(): Int
     fun getCalendarMonth(mDate: String): List<CalendarDomModel>
     fun getJobsList(mDate: String): List<DiaryDomModelWithHour>
-    suspend fun addJob(domModel: DiaryDomModel): Long
+    suspend fun addJob(domModel: DiaryDomModel): Int
     fun getAllData(): LiveData<List<DiaryDomModel>>
 }

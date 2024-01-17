@@ -106,7 +106,12 @@ class MainFragmentViewModel @Inject constructor(
         cal.timeInMillis = milliSeconds
         return formatter.format(cal.time)
     }
-
+    fun getDateDdMmYyyy(milliSeconds: Long): String {
+        val formatter = SimpleDateFormat("dd.MM.yyyy")
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = milliSeconds
+        return formatter.format(cal.time)
+    }
     fun getDates() {
         calendar.set(Calendar.MONTH, currentMonth)
         calendar.set(Calendar.DAY_OF_MONTH, INT_ONE)
