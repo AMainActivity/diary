@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:descendantFocusability="blocksDescendants"
+    app:cardBackgroundColor="@color/blue"
+    app:cardCornerRadius="7dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true"
+    app:strokeColor="@android:color/darker_gray"
+    app:strokeWidth="2dp">>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:layout_weight="1"
+        android:background="@android:color/transparent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_menu_help"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="email"
+                android:gravity="left"
+                android:linksClickable="true"
+                android:padding="3dp"
+                android:textColor="#000"
+                android:textStyle="bold"
+                tools:text="@string/ma_menu_about" />
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.cardview.widget.CardView>
