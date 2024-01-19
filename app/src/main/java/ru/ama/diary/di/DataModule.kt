@@ -11,14 +11,10 @@ import ru.ama.diary.domain.repository.DiaryRepository
 
 @Module
 interface DataModule {
-
-
     @ApplicationScope
     @Binds
     fun bindDiaryRepository(impl: DiaryRepositoryImpl): DiaryRepository
-
     companion object {
-
         @Provides
         @ApplicationScope
         fun provideJobDao(

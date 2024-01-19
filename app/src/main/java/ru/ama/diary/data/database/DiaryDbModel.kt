@@ -17,7 +17,6 @@ data class DiaryDBModel(
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
-
     companion object {
         const val mTableName = "todo_table"
     }

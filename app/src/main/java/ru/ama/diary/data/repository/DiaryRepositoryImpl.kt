@@ -24,8 +24,6 @@ class DiaryRepositoryImpl @Inject constructor(
     private val jobListDao: JobListDao,
     private val application: Application
 ) : DiaryRepository {
-
-
     private fun getJsonDataFromAsset(fileName: String): String? {
         val jsonString: String
         try {
@@ -44,27 +42,18 @@ class DiaryRepositoryImpl @Inject constructor(
     override suspend fun loadJobsFromAssets(): List<Int> {
         val listOfItems: MutableList<Int> = mutableListOf()
         try {
-
             val jsonFileString = getJsonDataFromAsset(JSON_FILENAME)
-
-            //Log.i("data", jsonFileString!!)
-
             val gson = Gson()
             val listDTOType = object : TypeToken<List<DiaryDto>>() {}.type
-
             val jobListDTO: List<DiaryDto> = gson.fromJson(jsonFileString, listDTOType)
             val dbModelJobList = jobListDTO.map {
                 mapper.mapDataDtoToDbModel(it)
             }
-
             val jobItemsCount = jobListDao.insertJobsList(dbModelJobList)
             listOfItems.add(jobItemsCount.size)
-
         } catch (e: Exception) {
         }
         return listOfItems
-
-
     }
 
     override suspend fun getCountOfJobs() = jobListDao.getCountJobs()
@@ -72,10 +61,8 @@ class DiaryRepositoryImpl @Inject constructor(
     override fun getCalendarMonth(mDate: String): List<CalendarDomModel> =
         (jobListDao.getCalendarByMonth(mDate)).map { calMapper.mapCalendarDbModelToEntity(it) }
 
-
     override fun getJobsList(mDate: String): List<DiaryDomModelWithHour> =
         (jobListDao.getJobsList(mDate)).map { mapper.mapDataDbModelHourToEntity(it) }
-
 
     override fun getAllData(): LiveData<List<DiaryDomModel>> {
         return Transformations.map(jobListDao.getAllJobsList()) {

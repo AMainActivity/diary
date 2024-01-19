@@ -30,6 +30,8 @@ class MainFragment : Fragment() {
     private val binding: FragmentMainBinding
         get() = _binding ?: throw RuntimeException("FragmentMainBinding == null")
     private lateinit var viewModel: MainFragmentViewModel
+    private lateinit var jobAdapter: JobAdapter
+    private lateinit var adapter: CalendarAdapter
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -62,12 +64,10 @@ class MainFragment : Fragment() {
                 viewModel.getDatesOfNextMonth()
                 true
             }
-
             R.id.menu_left -> {
                 viewModel.getDatesOfPreviousMonth()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -98,9 +98,7 @@ class MainFragment : Fragment() {
             )
             .setCancelable(true)
             .setPositiveButton(getString(R.string.frgmnt_main_create)) { _, _ ->
-                AddJobFragment.newInstance(jobModel, mDate).show(
-                    childFragmentManager, AddJobFragment.NAME
-                )
+                showAddJobFragment(jobModel, mDate)
             }
             .setNegativeButton(getString(R.string.frgmnt_main_cancel)) { dialogInterface, i ->
                 dialogInterface.dismiss()
@@ -110,14 +108,33 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        (requireActivity() as AppCompatActivity).supportActionBar?.subtitle = null
-
-
         viewModel = ViewModelProvider(this, viewModelFactory)[MainFragmentViewModel::class.java]
+        setAdapters()
+        setObservers()
+    }
 
-        val adapter = CalendarAdapter()
-        val jobAdapter = JobAdapter()
+    private fun setAdapters() {
+        adapter = CalendarAdapter()
+        jobAdapter = JobAdapter()
+        binding.rvCalendar.adapter = adapter
+        binding.rvCalendar.itemAnimator = null
+        binding.rvJobList.adapter = jobAdapter
+        binding.rvJobList.itemAnimator = null
+        val dividerItemDecoration = DividerItemDecoration(
+            requireContext(),
+            LinearLayoutManager.VERTICAL
+        )
+        binding.rvJobList.addItemDecoration(dividerItemDecoration)
+        setAdaptersOnitemClickListeners()
+    }
+
+    private fun showAddJobFragment(jobModel: DiaryDomModelWithHour, mDate: Long) {
+        AddJobFragment.newInstance(jobModel, mDate).show(
+            childFragmentManager, AddJobFragment.NAME
+        )
+    }
+
+    private fun setAdaptersOnitemClickListeners() {
         adapter.onCalendarClickListener = object : CalendarAdapter.OnCalendarClickListener {
             override fun onCalendarClick(calendarModel: CalendarDomModel) {
                 binding.tvDate.text = getString(
@@ -131,7 +148,6 @@ class MainFragment : Fragment() {
         }
         jobAdapter.onJobClickListener = object : JobAdapter.OnJobClickListener {
             override fun onJobClick(jobModel: DiaryDomModelWithHour) {
-                //Log.e("jobModel", jobModel.toString())
                 if (jobModel.name.isNotEmpty())
                     DetailJobFragment.newInstance(jobModel).show(
                         childFragmentManager, DetailJobFragment.NAME
@@ -141,17 +157,16 @@ class MainFragment : Fragment() {
             }
 
         }
-        binding.rvCalendar.adapter = adapter
-        binding.rvCalendar.itemAnimator = null
-        binding.rvJobList.adapter = jobAdapter
-        binding.rvJobList.itemAnimator = null
+    }
 
-
-        val dividerItemDecoration = DividerItemDecoration(
-            requireContext(),
-            LinearLayoutManager.VERTICAL
+    private fun setObservers() {
+        viewModel.getJobList(System.currentTimeMillis())
+        binding.tvDate.text = getString(
+            R.string.frgmnt_main_job_today, viewModel.getDayNumber(System.currentTimeMillis()),
+            viewModel.getMonthName(System.currentTimeMillis()),
+            viewModel.getYear(System.currentTimeMillis())
         )
-        binding.rvJobList.addItemDecoration(dividerItemDecoration)
+
         viewModel.calendarDomModelLV.observe(viewLifecycleOwner) {
             adapter.submitList(it)
             setSubTitleText(
@@ -161,35 +176,19 @@ class MainFragment : Fragment() {
                     viewModel.getYear(it[INT_ZERO].mDate)
                 )
             )
-
-            //Log.e("calendarDomModel", it.toString())
-            //og.e("calendar", viewModel.calendar.time.toString())
         }
+        viewModel.scrollPosition.observe(viewLifecycleOwner) {
+            binding.rvCalendar.smoothScrollToPosition(it)
+        }
+
         viewModel.jobsListLD?.observe(viewLifecycleOwner) {
             viewModel.getDates()
             viewModel.getJobList(viewModel.mDateL)
         }
         viewModel.jobListDomModelLV.observe(viewLifecycleOwner) {
             jobAdapter.submitList(it)
-
-            //Log.e("jobListDomModel", it.toString())
         }
-
-        viewModel.getJobList(System.currentTimeMillis())
-        binding.tvDate.text = getString(
-            R.string.frgmnt_main_job_today, viewModel.getDayNumber(System.currentTimeMillis()),
-            viewModel.getMonthName(System.currentTimeMillis()),
-            viewModel.getYear(System.currentTimeMillis())
-        )
-        viewModel.scrollPosition.observe(viewLifecycleOwner) {
-            binding.rvCalendar.smoothScrollToPosition(it)
-
-            //Log.e("pos", it.toString())
-        }
-
-
     }
-
 
     companion object {
         const val INT_ZERO = 0

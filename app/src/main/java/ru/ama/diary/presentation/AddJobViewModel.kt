@@ -54,8 +54,6 @@ class AddJobViewModel @Inject constructor(
                     R.string.frgmnt_addjob_date, mDate, mTime
                 ), name, description
             )
-
-
         } else {
             validateInputData(mDate, JobAttributeNames.JOB_DATE)
             validateInputData(name, JobAttributeNames.JOB_NAME)
@@ -90,7 +88,6 @@ class AddJobViewModel @Inject constructor(
             JobAttributeNames.JOB_NAME -> _errorName.value = false
             JobAttributeNames.JOB_DESCRIPTION -> _errorDescription.value = false
         }
-
     }
 
     fun parseTime(time: String): String {
@@ -111,8 +108,6 @@ class AddJobViewModel @Inject constructor(
         name: String,
         description: String
     ) {
-        //Log.e("addJob", mDate + " ${convertStringToDateInMilis(mDate)}")
-
         val d1 = viewModelScope.async(Dispatchers.IO) {
             addJobUseCase(
                 DiaryDomModel(

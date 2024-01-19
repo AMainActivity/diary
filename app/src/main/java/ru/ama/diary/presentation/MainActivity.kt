@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.menu_add_job -> {
-                AddJobFragment.newInstance(null,0).show(
+                AddJobFragment.newInstance(null, 0).show(
                     supportFragmentManager, AddJobFragment.NAME
                 )
                 true
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         val binding2 = ItemMenuInfoBinding.inflate(layoutInflater)
         popupWindow.setBackgroundDrawable(
             ResourcesCompat.getDrawable(
-                getResources(), R.drawable.nulldr, null
+                resources, R.drawable.nulldr, null
             )
         )
         binding2.tvMenuHelp.linksClickable = true

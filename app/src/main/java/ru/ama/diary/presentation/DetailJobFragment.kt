@@ -31,15 +31,12 @@ class DetailJobFragment : DialogFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-
-    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-
-        }
-    }
-
     override fun onStart() {
         super.onStart()
+        setDialogLayout()
+    }
+
+    private fun setDialogLayout() {
         val width = ViewGroup.LayoutParams.MATCH_PARENT
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
         dialog?.window?.setLayout(width, height)
@@ -47,7 +44,6 @@ class DetailJobFragment : DialogFragment() {
 
     override fun onAttach(context: Context) {
         component.inject(this)
-
         super.onAttach(context)
     }
 
@@ -61,11 +57,14 @@ class DetailJobFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailJobBinding.inflate(inflater, container, false)
+        setDialogAttributes()
+        return binding.root
+    }
 
+    private fun setDialogAttributes() {
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.attributes?.windowAnimations = R.style.dialog_animation_pd
-        return binding.root
     }
 
     override fun onDestroyView() {
@@ -75,14 +74,11 @@ class DetailJobFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.onBackPressedDispatcher?.addCallback(
-            viewLifecycleOwner,
-            onBackPressedCallback
-        )
-
-
-
         viewModel = ViewModelProvider(this, viewModelFactory)[DetailJobViewModel::class.java]
+        setTextInViews()
+    }
+
+    private fun setTextInViews() {
         binding.jobDetailTvName.text = jobModel.name
         binding.jobDetailTvDatetime.text =
             getString(
@@ -93,7 +89,6 @@ class DetailJobFragment : DialogFragment() {
             )
         binding.jobDetailTvInfo.text = jobModel.description
     }
-
 
     private fun parseArgs() {
         val args = requireArguments()

@@ -1,7 +1,9 @@
 package ru.ama.diary.presentation.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.ama.diary.R
@@ -49,63 +51,51 @@ class JobAdapter : ListAdapter<DiaryDomModelWithHour, RecyclerView.ViewHolder>(J
 
     }
 
+    private fun setItemTextAndClick(
+        mTitle: TextView,
+        mTimePeriod: TextView,
+        mRoot: View,
+        mJob: DiaryDomModelWithHour
+    ) {
+        with(mJob) {
+            mTimePeriod.text = mTimePeriod.context.getString(
+                R.string.job_adapter_time_period,
+                timeStart,
+                timeEnd
+            )
+            mTitle.text = name
+            mRoot.setOnClickListener {
+                onJobClickListener?.onJobClick(mJob)
+            }
+        }
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val mJob = getItem(position)
-        val itemtype = holder.itemViewType
-        when (itemtype) {
+        val itemType = holder.itemViewType
+        when (itemType) {
             VIEW_TYPE_NO_DATA -> {
                 val binding = (holder as JobViewHolderNoData).binding
                 with(holder.binding) {
-                    with(mJob) {
-                        tvTimePeriod.text = tvTimePeriod.context.getString(
-                            R.string.job_adapter_time_period,
-                            timeStart,
-                            timeEnd
-                        )
-                        tvTitle.text = name
-
-                        root.setOnClickListener {
-                            onJobClickListener?.onJobClick(this)
-                        }
-                    }
+                    setItemTextAndClick(tvTitle, tvTimePeriod, root, mJob)
                 }
             }
 
             VIEW_TYPE_WITH_DATA -> {
                 val binding = (holder as JobViewHolderWithData).binding
                 with(binding) {
-                    with(mJob) {
-                        tvTimePeriod.text = tvTimePeriod.context.getString(
-                            R.string.job_adapter_time_period,
-                            timeStart,
-                            timeEnd
-                        )
-                        tvTitle.text = name
-
-                        root.setOnClickListener {
-                            onJobClickListener?.onJobClick(this)
-                        }
-                    }
+                    setItemTextAndClick(tvTitle, tvTimePeriod, root, mJob)
                 }
             }
 
-            else -> throw RuntimeException("Unknown view type: $itemtype")
+            else -> throw RuntimeException("Unknown view type: $itemType")
         }
 
     }
 
-    private fun getDayNumber(date: Date): String =
-        SimpleDateFormat("dd", Locale.getDefault()).format(date)
-
-    private fun getDay3LettersName(date: Date): String =
-        SimpleDateFormat("EE", Locale.getDefault()).format(date)
-
     companion object {
-
         const val VIEW_TYPE_WITH_DATA = 777
         const val VIEW_TYPE_NO_DATA = 555
-
     }
 
     interface OnJobClickListener {

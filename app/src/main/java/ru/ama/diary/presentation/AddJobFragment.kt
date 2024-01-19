@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ArrayAdapter
+import android.widget.DatePicker
 import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
@@ -40,13 +41,17 @@ class AddJobFragment : DialogFragment() {
     private val component by lazy {
         (requireActivity().application as MyApplication).component
     }
+    private val hoursArray by lazy {
+        resources.getStringArray(
+            R.array.hours_array
+        )
+    }
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
     override fun onAttach(context: Context) {
         component.inject(this)
-
         super.onAttach(context)
     }
 
@@ -57,10 +62,24 @@ class AddJobFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
+        setDialogLayout()
+    }
+
+    private fun setDialogLayout() {
         val width = ViewGroup.LayoutParams.MATCH_PARENT
         val height = ViewGroup.LayoutParams.WRAP_CONTENT
         dialog?.window?.setLayout(width, height)
     }
+
+    private fun setDatePickerChanged(popupWindow: PopupWindow) =
+        DatePicker.OnDateChangedListener { datePicker, year, monthOfYear, dayOfMonth ->
+            val formatter = SimpleDateFormat("dd.MM.yyyy")
+            val calendar: Calendar = Calendar.getInstance()
+            calendar.set(year, monthOfYear, dayOfMonth)
+            val s = formatter.format(calendar.time)
+            binding.frgmntAddJobEtDate.setText(s)
+            popupWindow.dismiss()
+        }
 
     private fun showPopupDatePicker(anchor: View) {
         val popupWindow = PopupWindow(requireContext())
@@ -74,37 +93,31 @@ class AddJobFragment : DialogFragment() {
         popupWindow.isFocusable = true
         popupWindow.width = WindowManager.LayoutParams.WRAP_CONTENT
         popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
-        val binding2 = DatePickerDaysBinding.inflate(layoutInflater)
+        val bindingDatePicker = DatePickerDaysBinding.inflate(layoutInflater)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            binding2.frgmntAddJobDp.setOnDateChangedListener { datePicker, year, monthOfYear, dayOfMonth ->
-                val formatter = SimpleDateFormat("dd.MM.yyyy")
-                val calendar: Calendar = Calendar.getInstance()
-                calendar.set(year, monthOfYear, dayOfMonth)
-                val s = formatter.format(calendar.time)
-                binding.frgmntAddJobEtDate.setText(s)
-                popupWindow.dismiss()
-
-            }
+            bindingDatePicker.frgmntAddJobDp.setOnDateChangedListener(
+                setDatePickerChanged(
+                    popupWindow
+                )
+            )
         } else {
             val cal = Calendar.getInstance()
             cal.timeInMillis = System.currentTimeMillis()
-            binding2.frgmntAddJobDp.init(
-                cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)
-            ) { datePicker, year, monthOfYear, dayOfMonth ->
-                val formatter = SimpleDateFormat("dd.MM.yyyy")
-                val calendar: Calendar = Calendar.getInstance()
-                calendar.set(year, monthOfYear, dayOfMonth)
-                val s = formatter.format(calendar.time)
-                binding.frgmntAddJobEtDate.setText(s)
-                popupWindow.dismiss()
-            }
+            bindingDatePicker.frgmntAddJobDp.init(
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH),
+                setDatePickerChanged(
+                    popupWindow
+                )
+            )
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             popupWindow.windowLayoutType =
                 WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG
         }
 
-        popupWindow.contentView = binding2.root
+        popupWindow.contentView = bindingDatePicker.root
         popupWindow.showAsDropDown(anchor)
     }
 
@@ -113,10 +126,14 @@ class AddJobFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddJobBinding.inflate(inflater, container, false)
+        setDialogAttributes()
+        return binding.root
+    }
+
+    private fun setDialogAttributes() {
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.attributes?.windowAnimations = R.style.dialog_animation_pd
-        return binding.root
     }
 
     override fun onDestroyView() {
@@ -124,22 +141,7 @@ class AddJobFragment : DialogFragment() {
         _binding = null
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel = ViewModelProvider(this, viewModelFactory)[AddJobViewModel::class.java]
-        val hoursArray = resources.getStringArray(
-            R.array.hours_array
-        )
-        val adapter: ArrayAdapter<*> = ArrayAdapter(
-            requireContext(),
-            R.layout.spinner_item, hoursArray
-        )
-        binding.frgmntAddJobCalendar.setOnClickListener {
-            showPopupDatePicker(it)
-        }
-        binding.frgmntAddJobTimeSpinner.adapter = adapter
-        observeViewModel()
+    private fun setChangeListeners() {
         binding.frgmntAddJobEtDate.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -170,6 +172,32 @@ class AddJobFragment : DialogFragment() {
                 viewModel.validateInputData(s.toString(), JobAttributeNames.JOB_DESCRIPTION)
             }
         })
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel = ViewModelProvider(this, viewModelFactory)[AddJobViewModel::class.java]
+
+        setSpinnerAdapter()
+        binding.frgmntAddJobCalendar.setOnClickListener {
+            showPopupDatePicker(it)
+        }
+        observeViewModel()
+        setChangeListeners()
+        setButtonAddClick()
+        setTextForViews()
+    }
+
+    private fun setSpinnerAdapter() {
+        val adapter: ArrayAdapter<*> = ArrayAdapter(
+            requireContext(),
+            R.layout.spinner_item, hoursArray
+        )
+        binding.frgmntAddJobTimeSpinner.adapter = adapter
+    }
+
+    private fun setButtonAddClick() {
         binding.frgmntAddJobButAdd.setOnClickListener {
             viewModel.tryJobSave(
                 binding.frgmntAddJobEtDate.text.toString(),
@@ -178,15 +206,16 @@ class AddJobFragment : DialogFragment() {
                 binding.frgmntAddJobEtDescription.text.toString()
             )
         }
+    }
+
+    private fun setTextForViews() {
         jobModel?.let {
             binding.frgmntAddJobEtDescription.setText(it.description)
             binding.frgmntAddJobEtDate.setText(viewModel.getDate(mDate))
             binding.frgmntAddJobTimeSpinner.setSelection(hoursArray.indexOf(viewModel.parseTime(it.timeStart)))
-            Log.e("indexOf",(hoursArray.indexOf(it.timeStart)).toString()+" "+it.timeStart)
+            Log.e("indexOf", (hoursArray.indexOf(it.timeStart)).toString() + " " + it.timeStart)
         }
-
     }
-
 
     private fun observeViewModel() {
         viewModel.isSuccessSave.observe(viewLifecycleOwner) {
@@ -227,7 +256,7 @@ class AddJobFragment : DialogFragment() {
         args.getParcelable<DiaryDomModelWithHour>(ARG_ADD_JOB)?.let {
             jobModel = it
         }
-        mDate=args.getLong(ARG_ADD_JOB_DATE)
+        mDate = args.getLong(ARG_ADD_JOB_DATE)
     }
 
     companion object {
